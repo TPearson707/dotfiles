@@ -13,6 +13,7 @@ Import-Module -Name Terminal-Icons
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadlineOption -BellStyle None
 Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
+Set-PSReadLineKeyHandler -Chord Ctrl+Backspace -Function BackwardKillWord
 Set-PSReadLineOption -PredictionSource History
 
 # Fzf Fuzzy Finder 
@@ -33,4 +34,14 @@ function which ($command) {
     Get-Command -Name $command -ErrorAction SilentlyContinue |
         Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
+
+# Touch File Creation
+function touch($file) {
+    if (!(Test-Path $file)) {
+        New-Item -ItemType File $file | Out-Null
+    } else {
+        (Get-Item $file).LastWriteTime = Get-Date
+    }
+}
+
 	
